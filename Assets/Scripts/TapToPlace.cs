@@ -15,7 +15,7 @@ public class TapToPlace : MonoBehaviour
 
     private ARRaycastManager aRRaycastManager;
 
-    private Vector2 TouchPosition;
+ 
 
     static List<ARRaycastHit> Hits = new List<ARRaycastHit>();
 
@@ -25,11 +25,29 @@ public class TapToPlace : MonoBehaviour
         
     }
 
+
+    bool GetTouchPos(out Vector2 TouchPosition)
+    {
+        if (Input.touchCount > 0)
+        {
+            TouchPosition = Input.GetTouch(0).position;
+            return true;
+        }
+
+        TouchPosition = default;
+        return false;
+    }
+
+
+
     // Update is called once per frame
     void Update()
     {
         if (!GetTouchPos(out Vector2 TouchPosition))
+        {
             return;
+        }
+
         if(aRRaycastManager.Raycast(TouchPosition, Hits, TrackableType.PlaneWithinPolygon))
         {
             var HitPos = Hits[0].pose;
@@ -46,15 +64,5 @@ public class TapToPlace : MonoBehaviour
     }
 
 
-    bool GetTouchPos(out Vector2 TouchPosition)
-    {
-        if(Input.touchCount>0)
-        {
-            TouchPosition = Input.GetTouch(0).position;
-            return true;
-        }
-
-        TouchPosition = default;
-        return false;
-    }
+  
 }
